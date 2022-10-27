@@ -27,11 +27,26 @@
             socket = new SockJS('/ws');
             privateStompClient = Stomp.over(socket);
             privateStompClient.connect({}, function(frame) {
-                    var gameId = document.getElementById('gameId').value;
+             var gameId = document.getElementById('gameId').value;
                     privateStompClient.subscribe('/game/' + gameId, function(result) {
-                        window.location.href = '/rps-game/games/'+ gameId;
+                        updatePlayerMove();
                     });
                 });
+
+            function updatePlayerMove() {
+                var gameId = document.getElementById('gameId').value;
+                $.post("/rps-game/games/" + gameId + "/player-move").done(function (fragment) {
+                    $("#playerPanel").replaceWith(fragment);
+                });
+            };
+
+            stompClient = Stomp.over(socket);
+
+            function move(move) {
+                var gameId = document.getElementById('gameId').value;
+                stompClient.send("/app/move", {},
+                  JSON.stringify({'gameId':gameId, 'move': move}));
+            }
         </script>
 
     <style>
@@ -41,7 +56,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="updatePlayerMove()">
 
 <div class="row" style="margin-top:1%">
     <div class="col-md-2"></div>
@@ -56,22 +71,8 @@
 
         <input type="hidden" id="gameId" th:value="${game.id}">
 
-        <div class="row">
-            <div class="col-md-6" style="text-align:center;">
-                <h4 th:text="${game.player1.name}">Player A</h4>
-                <div class="center"
-                        th:style="'width:50px;height:100px;background-image:url(' + @{${'data:image/jpeg;base64,'+ game.player1.move.base64Image}} + '); background-repeat: no-repeat, repeat; background-size: 100% 100%;'">
+        <div id="playerPanel" style="margin-top:1%"></div>
 
-                </div>
-            </div>
-            <div class="col-md-6" style="text-align:center;">
-                <h4 th:text="${game.player2==null ? 'WAITING FOR OPONENT' : game.player2.name}">Player B</h4>
-                <div th:if="${game.player2!=null}"
-                     class="center"
-                        th:style="'width:50px;height:100px;background-image:url(' + @{${'data:image/jpeg;base64,'+ game.player2.move.base64Image}} + '); background-repeat: no-repeat, repeat; background-size: 100% 100%;'">
-                </div>
-            </div>
-        </div>
     </div>
     <div class="col-md-2"></div>
 </div>

@@ -18,9 +18,14 @@ public class GameMoveController {
     @Autowired
     private GameService gameService;
 
-    @MessageMapping("/private")
-    public void sendToSpecificUser(@Payload MoveDto moveDto, Authentication authentication) {
-        gameService.joinGame(authentication.getName(), moveDto.getMove(), moveDto.getGameId());
-        simpMessagingTemplate.convertAndSend("/game/" + moveDto.getGameId(), moveDto);
+    @MessageMapping("/move")
+    public void move(@Payload MoveDto moveDto, Authentication authentication) {
+        gameService.playerMove(authentication.getName(), moveDto);
+        simpMessagingTemplate.convertAndSend("/game/" + moveDto.getGameId(), "");
+    }
+
+    @MessageMapping("/join")
+    public void join(@Payload MoveDto moveDto) {
+        simpMessagingTemplate.convertAndSend("/game/" + moveDto.getGameId(), "");
     }
 }

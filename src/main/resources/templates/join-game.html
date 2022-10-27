@@ -21,53 +21,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
     <script type="text/javascript">
-            var stompClient = null;
             var socket = new SockJS('/ws');
-            stompClient = Stomp.over(socket);
+            var stompClient = Stomp.over(socket);
 
-            function sendPrivateMessage(move) {
+             stompClient.connect({}, function(frame) {
+             console.log('connect stomp')
                 var gameId = document.getElementById('gameId').value;
-                var playerName = document.getElementById('playerName').value;
-                stompClient.send("/app/private", {},
-                  JSON.stringify({'playerName':playerName, 'gameId':gameId, 'move': move}));
-            }
+                stompClient.send("/app/join", {}, JSON.stringify({'gameId':gameId}));
+
+                window.location.href = '/rps-game/games/'+ gameId;
+             });
     </script>
 </head>
-<body>
-
-<div class="row" style="margin-top:1%">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-
-        <div th:if="${error!=null}" style="text-align:center; margin-top:1%"
-             class="alert alert-danger alert-dismissible">
-            <h4 class="error" th:text="${error}">Error message</h4>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-
-        <div class="row">
-            <input type="hidden" th:value="${gameId}" id="gameId">
-            <input type="hidden" th:value="${playerName}" id="playerName">
-            <div class="col-md-4" style="text-align:center;" th:each="move : ${moves}">
-                <button
-                        th:attr="onclick=|sendPrivateMessage('${move}')|"
-                        type="submit"
-                        class="btn"
-                        th:style="'width:50px;height:100px;background-image:url(' + @{${'data:image/jpeg;base64,'+ move.base64Image}} + '); background-repeat: no-repeat, repeat; background-size: 100% 100%;'">
-                </button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-
-            </div>
-            <div class="col-md-1"></div>
-        </div>
-    </div>
-    <div class="col-md-2"></div>
-</div>
+<body onLoad="joinGame()">
+<input type="hidden" id="gameId" th:value="${gameId}">
 </body>
 </html>

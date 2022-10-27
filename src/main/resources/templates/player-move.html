@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="playerMoveFrag">
+    <div id="playerPanel">
+        <div class="row">
+            <div class="col-md-6" style="text-align:center;" th:each="playerProperties : ${playersProperties}">
+                <h4 th:text="${playerProperties.name!=null ? playerProperties.name : 'Waiting for opponent'}">Player A</h4>
+
+                <div th:if="${playerProperties.canMove && !playerProperties.ready}" class="row">
+                    <div class="col-md-4" style="text-align:center;" th:each="move : ${moves}">
+                        <button
+                                th:attr="onclick=|move('${move}')|"
+                                type="submit"
+                                class="btn"
+                                th:style="'width:50px;height:100px;background-image:url(' + @{${'data:image/jpeg;base64,'+ move.base64Image}} + '); background-repeat: no-repeat, repeat; background-size: 100% 100%;'">
+                        </button>
+                    </div>
+                </div>
+                <div th:if="${playerProperties.showMove && playerProperties.move!=null}">
+                    <div class="center"
+                         th:style="'width:50px;height:100px;background-image:url(' + @{${'data:image/jpeg;base64,'+ playerProperties.move.base64Image}} + '); background-repeat: no-repeat, repeat; background-size: 100% 100%;'">
+                    </div>
+                </div>
+                <div th:if="${!playerProperties.showMove && !playerProperties.canMove && !playerProperties.ready}">
+                    <h4>Waiting for opponent move</h4>
+                </div>
+                <div th:if="${!playerProperties.showMove && !playerProperties.canMove && playerProperties.ready}">
+                    <h4>Opponent ready!</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

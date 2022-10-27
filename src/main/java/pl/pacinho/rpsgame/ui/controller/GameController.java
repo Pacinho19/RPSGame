@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import pl.pacinho.rpsgame.model.Game;
 import pl.pacinho.rpsgame.model.enums.Move;
 import pl.pacinho.rpsgame.service.GameService;
 import pl.pacinho.rpsgame.ui.UIConfig;
@@ -40,21 +40,34 @@ public class GameController {
         return "availableGames :: availableGamesFrag";
     }
 
-    @GetMapping(UIConfig.JOIN_TO_GAME)
-    public String joinGamePage(@PathVariable(value = "gameId") String gameId, Model model, Authentication authentication) {
-        model.addAttribute("gameId", gameId);
-        model.addAttribute("playerName", authentication.getName());
-        model.addAttribute("moves", Move.values());
+    @PostMapping(UIConfig.JOIN_TO_GAME)
+    public String joinGame(@PathVariable(value = "gameId") String gameId, Authentication authentication, Model model) {
+        try {
+            gameService.joinGame(authentication.getName(), gameId);
+            model.addAttribute("gameId", gameId);
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return gameHome(model);
+        }
         return "join-game";
     }
 
-    @GetMapping(UIConfig.NEW_GAME)
-    public String newGamePage(Model model) {
-        model.addAttribute("moves", Move.values());
-        return "new-game";
-    }
     @PostMapping(UIConfig.NEW_GAME)
-    public String newGame(@RequestParam Move move, Authentication authentication) {
-        return "redirect:" + UIConfig.GAMES + "/" + gameService.newGame(authentication.getName(), move);
+    public String newGame(Authentication authentication) {
+        return "redirect:" + UIConfig.GAMES + "/" + gameService.newGame(authentication.getName());
     }
+
+    @PostMapping(UIConfig.PLAYER_MOVE)
+    public String playerMove(@PathVariable(value = "gameId") String gameId, Model model, Authentication authentication) {
+        try {
+            model.addAttribute("playersProperties", gameService.getPlayerPanelProperties(authentication.getName(), gameId));
+            model.addAttribute("moves", Move.values());
+            model.addAttribute("gameId", gameId);
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return gameHome(model);
+        }
+        return "player-move :: playerMoveFrag";
+    }
+
 }
