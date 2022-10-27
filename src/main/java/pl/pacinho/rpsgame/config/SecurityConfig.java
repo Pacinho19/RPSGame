@@ -22,6 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .withUser("Player2")
                 .password(getPasswordEncoder().encode("test"))
+                .roles("player_role")
+                .and()
+                .withUser("Player3")
+                .password(getPasswordEncoder().encode("test"))
                 .roles("player_role");
     }
 

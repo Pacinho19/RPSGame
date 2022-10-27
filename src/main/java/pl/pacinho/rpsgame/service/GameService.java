@@ -75,6 +75,8 @@ public class GameService {
 
     public boolean checkOpenGame(String gameId, String name) {
         Game game = findById(gameId);
-        return game.getPlayers().stream().anyMatch(p -> p.getName().equals(name));
+        return game.getPlayers()
+                .stream()
+                .anyMatch(p -> p.getName() != null && p.getName().equals(name));
     }
 }
