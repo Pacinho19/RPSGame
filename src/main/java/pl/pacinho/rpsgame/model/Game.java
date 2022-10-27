@@ -12,12 +12,12 @@ public class Game {
 
     private String id;
     private GameStatus status;
-    private String player1;
-    private LocalDateTime startTime;
+    private Player player1;
     @Setter
-    private String player2;
+    private Player player2;
+    private LocalDateTime startTime;
 
-    public Game(String player1) {
+    public Game(Player player1) {
         this.player1 = player1;
         this.id = UUID.randomUUID().toString();
         this.status = GameStatus.NEW;

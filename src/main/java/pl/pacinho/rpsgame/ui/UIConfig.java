@@ -1,6 +1,9 @@
 package pl.pacinho.rpsgame.ui;
 
 public class UIConfig {
-    public static final String GAME_HOME = "/rps-game";
-    public static final String GAMES_LIST = GAME_HOME + "/games";
+    public static final String HOME = "/rps-game";
+    public static final String GAMES = HOME + "/games";
+    public static final String NEW_GAME = GAMES + "/new";
+    public static final String GAME_PAGE = GAMES + "/{gameId}";
+    public static final String JOIN_TO_GAME = GAME_PAGE + "/join";
 }

@@ -1,12 +1,15 @@
 package pl.pacinho.rpsgame.repository;
 
 import org.springframework.stereotype.Repository;
+import pl.pacinho.rpsgame.exception.GameNotFoundException;
 import pl.pacinho.rpsgame.model.Game;
+import pl.pacinho.rpsgame.model.Player;
 import pl.pacinho.rpsgame.model.enums.GameStatus;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class GameRepository {
@@ -15,36 +18,26 @@ public class GameRepository {
 
     public GameRepository() {
         gameMap = new HashMap<>();
-        newGame("Player1234");
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(10000);
-                newGame("Thread Player");
-                System.out.println("Added thread player");
-            } catch (InterruptedException e) {
-            }
-        }).start();
     }
 
-    public String newGame(String playerName) {
-        Game game = new Game(playerName);
+    public String newGame(Player player) {
+        Game game = new Game(player);
         gameMap.put(game.getId(), game);
         return game.getId();
     }
 
-    public void joinGame(String playerName, String gameId) {
+    public void joinGame(Player player, String gameId) {
         Game game = gameMap.get(gameId);
         if (game == null)
-            throw new IllegalArgumentException("Game " + gameId + " not found !");
+            throw new GameNotFoundException(gameId);
 
         if (game.getStatus() != GameStatus.NEW)
             throw new IllegalStateException("Cannot join to " + gameId + ". Game status : " + game.getStatus());
 
-        if (game.getPlayer1().equals(playerName))
+        if (game.getPlayer1().getName().equals(player.getName()))
             throw new IllegalStateException("Game " + gameId + " was created by you!");
 
-        game.setPlayer2(playerName);
+        game.setPlayer2(player);
     }
 
     public List<Game> getAvailableGames() {
@@ -52,5 +45,9 @@ public class GameRepository {
                 .stream()
                 .filter(game -> game.getStatus() == GameStatus.NEW)
                 .toList();
+    }
+
+    public Optional<Game> findById(String gameId) {
+        return Optional.ofNullable(gameMap.get(gameId));
     }
 }

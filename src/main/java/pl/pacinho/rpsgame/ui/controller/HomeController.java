@@ -9,6 +9,6 @@ public class HomeController {
 
     @GetMapping
     public String home() {
-        return "redirect:" + UIConfig.GAME_HOME;
+        return "redirect:" + UIConfig.HOME;
     }
 }
