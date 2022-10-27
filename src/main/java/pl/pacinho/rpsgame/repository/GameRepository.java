@@ -15,6 +15,16 @@ public class GameRepository {
 
     public GameRepository() {
         gameMap = new HashMap<>();
+        newGame("Player1234");
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(10000);
+                newGame("Thread Player");
+                System.out.println("Added thread player");
+            } catch (InterruptedException e) {
+            }
+        }).start();
     }
 
     public String newGame(String playerName) {

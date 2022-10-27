@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="availableGamesFrag">
+  <div id="availableGames">
+
+    <table class="table primary">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Start Time</th>
+        <th scope="col">Player</th>
+        <th scope="col">JOIN</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="game, iterStat : ${games}">
+        <td><span th:text="${iterStat.count}"> </span></td>
+        <td><span th:text="${game.startTime}"> </span></td>
+        <td><span th:text="${game.player1}"> </span></td>
+        <td>+</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+</body>
+</html>
