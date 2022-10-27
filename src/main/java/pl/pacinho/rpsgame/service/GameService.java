@@ -57,7 +57,7 @@ public class GameService {
         PlayerPropertiesDto playerPropertiesDto = PlayerPropertiesDto.builder()
                 .canMove(checkPlayerName(p.getName(), name))
                 .showMove(game.getStatus() == GameStatus.FINISHED || checkShowPlayerMove(p, name))
-                .ready(p.getMove()!=null)
+                .ready(p.getMove() != null)
                 .name(p.getName())
                 .build();
         playerPropertiesDto.setMove(playerPropertiesDto.isShowMove() ? p.getMove() : null);
@@ -71,5 +71,10 @@ public class GameService {
     private boolean checkPlayerName(String player, String name) {
         if (player == null) return false;
         return player.equals(name);
+    }
+
+    public boolean checkOpenGame(String gameId, String name) {
+        Game game = findById(gameId);
+        return game.getPlayers().stream().anyMatch(p -> p.getName().equals(name));
     }
 }

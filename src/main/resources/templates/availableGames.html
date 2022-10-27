@@ -23,7 +23,7 @@
                         <button type="submit" class="btn btn-primary"><i class="bi bi-plus"></i></button>
                     </form>
                 </td>
-                <td th:if="${game.status.name=='IN_PROGRESS'">
+                <td th:if="${game.status.name=='IN_PROGRESS'}">
                     <form th:action="@{'/rps-game/games/' + ${game.id}}" th:method="get">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-eye"></i></button>
                     </form>

@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import pl.pacinho.rpsgame.model.Game;
 import pl.pacinho.rpsgame.model.enums.Move;
 import pl.pacinho.rpsgame.service.GameService;
 import pl.pacinho.rpsgame.ui.UIConfig;
@@ -43,6 +42,9 @@ public class GameController {
     @PostMapping(UIConfig.JOIN_TO_GAME)
     public String joinGame(@PathVariable(value = "gameId") String gameId, Authentication authentication, Model model) {
         try {
+            if(gameService.checkOpenGame(gameId, authentication.getName()))
+                return "redirect:" + UIConfig.GAMES + "/" +gameId;
+
             gameService.joinGame(authentication.getName(), gameId);
             model.addAttribute("gameId", gameId);
         } catch (Exception e) {
