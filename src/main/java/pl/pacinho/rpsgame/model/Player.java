@@ -1,9 +1,7 @@
 package pl.pacinho.rpsgame.model;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
 import pl.pacinho.rpsgame.model.enums.Move;
 
 @Setter

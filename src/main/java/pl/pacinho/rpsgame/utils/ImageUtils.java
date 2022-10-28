@@ -1,4 +1,4 @@
-package pl.pacinho.rpsgame;
+package pl.pacinho.rpsgame.utils;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.core.io.ClassPathResource;

@@ -2,7 +2,7 @@ package pl.pacinho.rpsgame.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import pl.pacinho.rpsgame.ImageUtils;
+import pl.pacinho.rpsgame.utils.ImageUtils;
 
 @RequiredArgsConstructor
 public enum Move {
