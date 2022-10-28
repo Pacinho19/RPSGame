@@ -4,9 +4,9 @@
 <div th:fragment="availableGamesFrag">
     <div id="availableGames">
 
-        <table class="table primary">
+        <table class="table table-striped">
             <thead>
-            <tr>
+            <tr class="table-light">
                 <th scope="col">#</th>
                 <th scope="col">ID</th>
                 <th scope="col">Start Time</th>
@@ -14,7 +14,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="game, iterStat : ${games}">
+            <tr class="table-light" th:each="game, iterStat : ${games}">
                 <td><span th:text="${iterStat.count}"> </span></td>
                 <td><span th:text="${game.id}"> </span></td>
                 <td><span th:text="${game.startTime}"> </span></td>

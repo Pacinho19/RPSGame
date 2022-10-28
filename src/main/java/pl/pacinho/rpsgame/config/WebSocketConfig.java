@@ -18,7 +18,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/game");
+        registry.enableSimpleBroker("/game", "/join");
         registry.setApplicationDestinationPrefixes("/app");
     }
 }

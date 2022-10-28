@@ -21,11 +21,11 @@ public class GameMoveController {
     @MessageMapping("/move")
     public void move(@Payload MoveDto moveDto, Authentication authentication) {
         gameService.playerMove(authentication.getName(), moveDto);
-        simpMessagingTemplate.convertAndSend("/game/" + moveDto.getGameId(), "");
+        simpMessagingTemplate.convertAndSend("/game/" + moveDto.getGameId(),authentication.getName());
     }
 
     @MessageMapping("/join")
-    public void join(@Payload MoveDto moveDto) {
-        simpMessagingTemplate.convertAndSend("/game/" + moveDto.getGameId(), "");
+    public void join(@Payload MoveDto moveDto, Authentication authentication) {
+        simpMessagingTemplate.convertAndSend("/join/" + moveDto.getGameId(), authentication.getName());
     }
 }

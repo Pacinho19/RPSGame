@@ -9,7 +9,7 @@ public enum Move {
 
     ROCK(ImageUtils.getBase64Image("ROCK")),
     PAPER(ImageUtils.getBase64Image("PAPER")),
-    scissors(ImageUtils.getBase64Image("SCISSORS"));
+    SCISSORS(ImageUtils.getBase64Image("SCISSORS"));
 
     @Getter
     private final String base64Image;

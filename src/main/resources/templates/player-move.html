@@ -5,7 +5,8 @@
     <div id="playerPanel">
         <div class="row">
             <div class="col-md-6" style="text-align:center;" th:each="playerProperties : ${playersProperties}">
-                <h4 th:text="${playerProperties.name!=null ? playerProperties.name : 'Waiting for opponent'}">Player A</h4>
+                <h4 th:text="${playerProperties.name!=null ? playerProperties.name : 'Waiting for opponent'}">Player
+                    A</h4>
 
                 <div th:if="${playerProperties.canMove && !playerProperties.ready}" class="row">
                     <div class="col-md-4" style="text-align:center;" th:each="move : ${moves}">
@@ -27,6 +28,14 @@
                 </div>
                 <div th:if="${!playerProperties.showMove && !playerProperties.canMove && playerProperties.ready}">
                     <h4>Opponent ready!</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div th:if="${endGameInfo!=null}" style="text-align:center; margin-top:1%"
+                     class="alert alert-success">
+                    <h4 class="success" th:text="${endGameInfo}">End game info message</h4>
                 </div>
             </div>
         </div>

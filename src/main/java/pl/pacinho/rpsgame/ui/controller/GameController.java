@@ -63,6 +63,7 @@ public class GameController {
     public String playerMove(@PathVariable(value = "gameId") String gameId, Model model, Authentication authentication) {
         try {
             model.addAttribute("playersProperties", gameService.getPlayerPanelProperties(authentication.getName(), gameId));
+            model.addAttribute("endGameInfo", gameService.checkEndGame(gameId));
             model.addAttribute("moves", Move.values());
             model.addAttribute("gameId", gameId);
         } catch (Exception e) {

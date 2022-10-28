@@ -27,9 +27,14 @@
             socket = new SockJS('/ws');
             privateStompClient = Stomp.over(socket);
             privateStompClient.connect({}, function(frame) {
-             var gameId = document.getElementById('gameId').value;
+            var gameId = document.getElementById('gameId').value;
                     privateStompClient.subscribe('/game/' + gameId, function(result) {
                         updatePlayerMove();
+                        showAlert(result.body + ' made his move !');
+                    });
+                     privateStompClient.subscribe('/join/' + gameId, function(result) {
+                        updatePlayerMove();
+                        showAlert(result.body + ' joined the game !');
                     });
                 });
 
@@ -47,7 +52,23 @@
                 stompClient.send("/app/move", {},
                   JSON.stringify({'gameId':gameId, 'move': move}));
             }
-        </script>
+
+            $(document).ready(function() {
+                $("#join-player-alert").hide();
+            });
+
+            function showAlert(text){
+                document.getElementById('playerJoinName').innerHTML = text;
+                $("#join-player-alert").fadeTo(2000, 500).slideUp(500, function() {
+                  $("#join-player-alert").slideUp(500);
+                });
+            };
+
+            function home (){
+                window.location.href = '/rps-game'
+            };
+
+    </script>
 
     <style>
         .center {
@@ -55,14 +76,26 @@
           margin-right: auto;
         }
     </style>
+
+    <style>
+    body {
+      background-image: url('https://static6.depositphotos.com/1115641/654/i/450/depositphotos_6544136-stock-photo-rock-paper-and-scissors.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+    }
+    </style>
 </head>
 <body onload="updatePlayerMove()">
 
 <div class="row" style="margin-top:1%">
-    <div class="col-md-2"></div>
+    <div class="col-md-2" style="text-align:center">
+        <button type="button" class="btn btn-primary" onclick="home();">Home</button>
+    </div>
     <div class="col-md-8">
 
-        <div th:if="${error!=null}" style="text-align:center; margin-top:1%" class="alert alert-danger alert-dismissible">
+        <div th:if="${error!=null}" style="text-align:center; margin-top:1%"
+             class="alert alert-danger alert-dismissible">
             <h4 class="error" th:text="${error}">Error message</h4>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -74,7 +107,12 @@
         <div id="playerPanel" style="margin-top:1%"></div>
 
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-2">
+        <div class="alert alert-success" id="join-player-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong id="playerJoinName"> </strong>
+        </div>
+    </div>
 </div>
 </body>
 </html>

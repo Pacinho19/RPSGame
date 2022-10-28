@@ -8,8 +8,11 @@ import pl.pacinho.rpsgame.model.MoveDto;
 import pl.pacinho.rpsgame.model.Player;
 import pl.pacinho.rpsgame.model.PlayerPropertiesDto;
 import pl.pacinho.rpsgame.model.enums.GameStatus;
+import pl.pacinho.rpsgame.model.enums.Move;
+import pl.pacinho.rpsgame.model.enums.MoveBattle;
 import pl.pacinho.rpsgame.repository.GameRepository;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -78,5 +81,17 @@ public class GameService {
         return game.getPlayers()
                 .stream()
                 .anyMatch(p -> p.getName() != null && p.getName().equals(name));
+    }
+
+    public String checkEndGame(String gameId) {
+        Game game = findById(gameId);
+        LinkedList<Player> players = game.getPlayers();
+        if (players.stream().anyMatch(p -> p.getMove() == null)) return null;
+        if (players.stream().map(p -> p.getMove().name()).distinct().count() == 1L) return "Draw!";
+
+        Move player1Move = players.get(0).getMove();
+        Move player2Move = players.get(1).getMove();
+        int playerWin = MoveBattle.checkWin(player1Move, player2Move);
+        return players.get(playerWin).getName() + " win the game!";
     }
 }
